@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: ${RK_DATASOURCE_URL}
+    username: ${RK_DATASOURCE_USERNAME}
+    password: ${RK_DATASOURCE_PASSWORD}
