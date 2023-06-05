@@ -1,9 +1,6 @@
 package com.graccasoft.redkokia.model.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.math.BigDecimal;
 
@@ -18,4 +15,7 @@ public class Treatment {
     private BigDecimal price;
     private Integer minimumDuration;//in minutes
     private Integer maximumDuration;
+
+    @ManyToOne
+    private Tenant tenant;
 }
