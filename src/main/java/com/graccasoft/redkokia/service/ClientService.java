@@ -1,0 +1,26 @@
+package com.graccasoft.redkokia.service;
+
+import com.graccasoft.redkokia.model.dto.ClientDto;
+import com.graccasoft.redkokia.model.entity.Client;
+import com.graccasoft.redkokia.model.mapper.ClientMapper;
+import com.graccasoft.redkokia.repository.ClientRepository;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@AllArgsConstructor
+public class ClientService  {
+
+    private ClientMapper clientMapper;
+    private final ClientRepository clientRepository;
+
+    public ClientDto saveClient(ClientDto clientDto){
+        Client savedClient = clientRepository.save( clientMapper.toEntity(clientDto) );
+        return clientMapper.toDto( savedClient );
+    }
+
+    public ClientDto findByEmail(String email){
+        return  clientMapper.toDto( clientRepository.findByEmail(email).orElse(null) );
+    }
+
+}
