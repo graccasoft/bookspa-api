@@ -3,6 +3,7 @@ package com.graccasoft.redkokia.service;
 import com.graccasoft.redkokia.exception.RecordDoesNotExistException;
 import com.graccasoft.redkokia.model.dto.BookingDto;
 import com.graccasoft.redkokia.model.entity.Booking;
+import com.graccasoft.redkokia.model.entity.Client;
 import com.graccasoft.redkokia.model.mapper.BookingMapper;
 import com.graccasoft.redkokia.repository.BookingRepository;
 import lombok.AllArgsConstructor;
@@ -16,10 +17,19 @@ public class BookingService {
 
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
+    private final ClientService clientService;
 
     public BookingDto saveBooking(BookingDto bookingDto){
         //todo validate dates, etc
-        Booking savedBooking = bookingRepository.save( bookingMapper.toEntity( bookingDto ) );
+        Booking booking = bookingMapper.toEntity( bookingDto );
+
+        //use existing client
+        Client client = clientService.findByEmail(bookingDto.client().email());
+        if ( client != null ){
+            booking.setClient( client );
+        }
+
+        Booking savedBooking = bookingRepository.save( booking );
         return bookingMapper.toDto( savedBooking );
 
     }

@@ -21,8 +21,8 @@ public class ClientService  {
         return clientMapper.toDto( savedClient );
     }
 
-    public ClientDto findByEmail(String email){
-        return clientMapper.toDto( clientRepository.findByEmail(email).orElse(null) );
+    public Client findByEmail(String email){
+        return  clientRepository.findByEmail(email).orElse(null) ;
     }
 
     public List<ClientDto> getTenantClients(Long tenantId){
