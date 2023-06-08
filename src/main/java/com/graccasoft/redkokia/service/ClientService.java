@@ -7,6 +7,8 @@ import com.graccasoft.redkokia.repository.ClientRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class ClientService  {
@@ -20,7 +22,11 @@ public class ClientService  {
     }
 
     public ClientDto findByEmail(String email){
-        return  clientMapper.toDto( clientRepository.findByEmail(email).orElse(null) );
+        return clientMapper.toDto( clientRepository.findByEmail(email).orElse(null) );
+    }
+
+    public List<ClientDto> getTenantClients(Long tenantId){
+        return clientMapper.toDtoList( clientRepository.findAllByTenant_Id(tenantId) );
     }
 
 }

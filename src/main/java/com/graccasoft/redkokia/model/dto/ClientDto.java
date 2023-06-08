@@ -7,7 +7,8 @@ public record ClientDto(
         String email,
         String address,
         String city,
-        String country
+        String country,
+        TenantDto tenant
 
 ) {
 }
