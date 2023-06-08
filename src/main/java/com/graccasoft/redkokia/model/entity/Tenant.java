@@ -12,7 +12,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class Tenant {
-//kl kl
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,5 +23,4 @@ public class Tenant {
     private String contactName;
     private String contactPhone;
 
-//jk
 }
