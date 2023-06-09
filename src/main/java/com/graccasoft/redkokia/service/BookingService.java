@@ -5,6 +5,7 @@ import com.graccasoft.redkokia.model.dto.BookingDto;
 import com.graccasoft.redkokia.model.entity.Booking;
 import com.graccasoft.redkokia.model.entity.Client;
 import com.graccasoft.redkokia.model.mapper.BookingMapper;
+import com.graccasoft.redkokia.model.mapper.ClientMapper;
 import com.graccasoft.redkokia.repository.BookingRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ public class BookingService {
     private final BookingMapper bookingMapper;
     private final BookingRepository bookingRepository;
     private final ClientService clientService;
+    private final ClientMapper clientMapper;
 
     public BookingDto saveBooking(BookingDto bookingDto){
         //todo validate dates, etc
@@ -25,9 +27,10 @@ public class BookingService {
 
         //use existing client
         Client client = clientService.findByEmail(bookingDto.client().email());
-        if ( client != null ){
-            booking.setClient( client );
+        if ( client == null ){
+            client = clientMapper.toEntity( clientService.saveClient(bookingDto.client()) );
         }
+        booking.setClient( client );
 
         Booking savedBooking = bookingRepository.save( booking );
         return bookingMapper.toDto( savedBooking );
