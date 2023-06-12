@@ -21,6 +21,7 @@ public class Booking {
 
     private Date bookingDate;
     private Integer duration;
+    @Enumerated(EnumType.STRING)
     private BookingStatus status;
 
     @ManyToOne

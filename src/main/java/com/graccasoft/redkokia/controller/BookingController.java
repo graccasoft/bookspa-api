@@ -35,4 +35,9 @@ public class BookingController {
     ){
         return bookingService.getAvailableTimeSlots(date,tenantId, duration);
     }
+
+    @DeleteMapping("{bookingId}")
+    public void cancelBooking(@PathVariable Long bookingId){
+        bookingService.cancelBooking(bookingId);
+    }
 }

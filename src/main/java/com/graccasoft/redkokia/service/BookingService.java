@@ -91,4 +91,9 @@ public class BookingService {
 
         return new TimeSlot(startTime, endTime);
     }
+
+
+    public void cancelBooking(Long bookingId){
+        bookingRepository.deleteById(bookingId);
+    }
 }
