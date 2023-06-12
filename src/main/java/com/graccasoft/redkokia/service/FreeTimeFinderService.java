@@ -3,53 +3,38 @@ package com.graccasoft.redkokia.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import com.graccasoft.redkokia.model.dto.TimeSlot;
+import org.springframework.stereotype.Service;
+
+@Service
 public class FreeTimeFinderService {
-    public static List<TimeSlot> findFreeTimeSlots(List<TimeSlot> bookings, LocalDateTime start_time, LocalDateTime end_time, int min_duration) {
+    public  List<TimeSlot> findFreeTimeSlots(List<TimeSlot> bookings, LocalDateTime startTime, LocalDateTime endTime, int minDuration) {
         // Sort the bookings by start time
-        bookings.sort((a, b) -> a.start_time.compareTo(b.start_time));
+        bookings.sort((a, b) -> a.startTime().compareTo(b.startTime()));
 
-        List<TimeSlot> free_time_slots = new ArrayList<>();
-        LocalDateTime current_time = start_time;
+        List<TimeSlot> freeTimeSlots = new ArrayList<>();
+        LocalDateTime currentTime = startTime;
 
-        // Iterate through the sorted bookings and find free time slots
-        for (TimeSlot booking : bookings) {
-            if (current_time.plusMinutes(min_duration).isBefore(booking.start_time)) {
-                free_time_slots.add(new TimeSlot(current_time, booking.start_time));
+        // Iterate through the time slots in 30 minute intervals and find free time slots
+        while (currentTime.plusMinutes(minDuration).isBefore(endTime)) {
+            LocalDateTime next_time = currentTime.plusMinutes(minDuration);
+
+            boolean isBooked = false;
+            for (TimeSlot booking : bookings) {
+                if (booking.startTime().isBefore(next_time) && booking.endTime().isAfter(currentTime)) {
+                    isBooked = true;
+                    currentTime = booking.endTime();
+                    break;
+                }
             }
-            current_time = current_time.isAfter(booking.end_time) ? current_time : booking.end_time;
+
+            if (!isBooked) {
+                freeTimeSlots.add(new TimeSlot(currentTime, next_time));
+                currentTime = next_time;
+            }
         }
 
-        if (current_time.plusMinutes(min_duration).isBefore(end_time)) {
-            free_time_slots.add(new TimeSlot(current_time, end_time));
-        }
-
-        return free_time_slots;
+        return freeTimeSlots;
     }
 
-    public static void main(String[] args) {
-        List<TimeSlot> bookings = new ArrayList<>();
-        bookings.add(new TimeSlot(LocalDateTime.of(2023, 6, 9, 10, 0), LocalDateTime.of(2023, 6, 9, 11, 0)));
-        bookings.add(new TimeSlot(LocalDateTime.of(2023, 6, 9, 12, 0), LocalDateTime.of(2023, 6, 9, 13, 0)));
-        bookings.add(new TimeSlot(LocalDateTime.of(2023, 6, 9, 14, 0), LocalDateTime.of(2023, 6, 9, 15, 0)));
-
-        LocalDateTime start_time = LocalDateTime.of(2023, 6, 9, 9, 0);
-        LocalDateTime end_time = LocalDateTime.of(2023, 6, 9, 16, 0);
-        int min_duration = 30;
-
-        List<TimeSlot> free_time_slots = findFreeTimeSlots(bookings, start_time, end_time, min_duration);
-
-        for (TimeSlot free_time_slot : free_time_slots) {
-            System.out.println(free_time_slot.start_time + " - " + free_time_slot.end_time);
-        }
-    }
-}
-
-class TimeSlot {
-    public LocalDateTime start_time;
-    public LocalDateTime end_time;
-
-    public TimeSlot(LocalDateTime start_time, LocalDateTime end_time) {
-        this.start_time = start_time;
-        this.end_time = end_time;
-    }
 }
