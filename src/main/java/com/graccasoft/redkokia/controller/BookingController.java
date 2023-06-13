@@ -27,15 +27,6 @@ public class BookingController {
         return bookingService.getBookings(tenantId);
     }
 
-    @GetMapping("/available-slots")
-    public List<TimeSlot> getAvailableTimeSlots(
-            @RequestParam Long tenantId,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date,
-            @RequestParam Integer duration
-    ){
-        return bookingService.getAvailableTimeSlots(date,tenantId, duration);
-    }
-
     @DeleteMapping("{bookingId}")
     public void cancelBooking(@PathVariable Long bookingId){
         bookingService.cancelBooking(bookingId);

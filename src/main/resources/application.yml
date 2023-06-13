@@ -10,3 +10,13 @@ spring:
   jpa:
     hibernate:
       ddlAuto: update
+
+jwt:
+  private.key: classpath:app.key
+  public.key: classpath:app.pub
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
