@@ -1,13 +1,10 @@
 package com.graccasoft.redkokia.controller;
 
 import com.graccasoft.redkokia.model.dto.BookingDto;
-import com.graccasoft.redkokia.model.dto.TimeSlot;
 import com.graccasoft.redkokia.service.BookingService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
