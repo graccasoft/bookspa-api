@@ -1,7 +1,7 @@
 package com.graccasoft.redkokia.controller;
 
 import com.graccasoft.redkokia.model.dto.GenericResponse;
-import com.graccasoft.redkokia.model.dto.UserDto;
+import com.graccasoft.redkokia.model.dto.RegisterUserDto;
 import com.graccasoft.redkokia.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,9 +19,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<GenericResponse> addNewUser(@RequestBody UserDto userDto){
+    public ResponseEntity<GenericResponse> addNewUser(@RequestBody RegisterUserDto registerUserDto){
 
-        userService.saveUser(userDto);
+        userService.saveUser(registerUserDto);
         return new ResponseEntity<>(
                 new GenericResponse(true, "User Saved"),
                 HttpStatus.CREATED);

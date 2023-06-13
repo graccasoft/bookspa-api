@@ -1,6 +1,6 @@
 package com.graccasoft.redkokia.model.dto;
 
-public record UserDto(
+public record RegisterUserDto(
         String firstName,
         String lastName,
         String username,

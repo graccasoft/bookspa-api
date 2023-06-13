@@ -1,5 +1,8 @@
 package com.graccasoft.redkokia.controller;
 
+import com.graccasoft.redkokia.model.dto.JwtDto;
+import com.graccasoft.redkokia.model.entity.User;
+import com.graccasoft.redkokia.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
@@ -20,10 +23,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class Token {
     private final JwtEncoder encoder;
+    private final UserService userService;
 
     @PostMapping
-    public String token(Authentication authentication) {
-        log.info("Username: {}", authentication.getName());
+    public JwtDto token(Authentication authentication) {
         Instant now = Instant.now();
         long expiry = 36000L;
         // @formatter:off
@@ -38,6 +41,9 @@ public class Token {
                 .claim("scope", scope)
                 .build();
         // @formatter:on
-        return this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+
+
+        String tokenValue = this.encoder.encode(JwtEncoderParameters.from(claims)).getTokenValue();
+        return userService.getUserJwt(authentication.getName(),  tokenValue);
     }
 }
