@@ -1,15 +1,13 @@
 package com.graccasoft.redkokia.controller;
 
+import com.graccasoft.redkokia.model.dto.BookingDto;
 import com.graccasoft.redkokia.model.dto.TimeSlot;
 import com.graccasoft.redkokia.model.dto.TreatmentDto;
 import com.graccasoft.redkokia.service.BookingService;
 import com.graccasoft.redkokia.service.TreatmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
 import java.util.List;
@@ -29,6 +27,12 @@ public class OnlineBookingController {
     ){
         return bookingService.getAvailableTimeSlots(date,tenantId, duration);
     }
+
+    @PostMapping
+    public BookingDto saveBooking(@RequestBody BookingDto bookingDto){
+        return bookingService.saveBooking(bookingDto);
+    }
+
 
     @GetMapping("/treatments")
     public List<TreatmentDto> getTreatments(@RequestParam Long tenantId){
