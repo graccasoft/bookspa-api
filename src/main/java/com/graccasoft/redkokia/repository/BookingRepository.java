@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public interface BookingRepository extends JpaRepository<Booking, Long> {
-    List<Booking> findAllByTreatment_Tenant_Id(Long tenantId);
+    List<Booking> findAllByTreatments_Tenant_Id(Long tenantId);
 
-    List<Booking> findAllByTreatment_Tenant_IdAndBookingDateBetween(Long tenantId, Date startDate, Date endDate);
+    List<Booking> findAllByTreatments_Tenant_IdAndBookingDateBetween(Long tenantId, Date startDate, Date endDate);
 }

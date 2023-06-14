@@ -3,6 +3,7 @@ package com.graccasoft.redkokia.model.dto;
 import com.graccasoft.redkokia.model.enums.BookingStatus;
 
 import java.util.Date;
+import java.util.List;
 
 public record BookingDto(
         Long id,
@@ -11,6 +12,6 @@ public record BookingDto(
         Integer duration,
         BookingStatus status,
         ClientDto client,
-        TreatmentDto treatment
+        List<TreatmentDto> treatments
 ) {
 }

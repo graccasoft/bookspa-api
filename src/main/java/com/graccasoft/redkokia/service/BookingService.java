@@ -9,6 +9,7 @@ import com.graccasoft.redkokia.model.mapper.BookingMapper;
 import com.graccasoft.redkokia.model.mapper.ClientMapper;
 import com.graccasoft.redkokia.repository.BookingRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -20,6 +21,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class BookingService {
 
     private final BookingMapper bookingMapper;
@@ -38,14 +40,13 @@ public class BookingService {
             client = clientMapper.toEntity( clientService.saveClient(bookingDto.client()) );
         }
         booking.setClient( client );
-
         Booking savedBooking = bookingRepository.save( booking );
         return bookingMapper.toDto( savedBooking );
 
     }
 
     public List<BookingDto> getBookings(Long tenantId){
-        return bookingMapper.toDtoList( bookingRepository.findAllByTreatment_Tenant_Id(tenantId) );
+        return bookingMapper.toDtoList( bookingRepository.findAllByTreatments_Tenant_Id(tenantId) );
     }
 
     public BookingDto getBooking(Long bookingId){
@@ -70,7 +71,7 @@ public class BookingService {
         endDate.set(Calendar.HOUR, 23);
         endDate.set(Calendar.MINUTE, 59);
 
-        List<Booking> currentBookings = bookingRepository.findAllByTreatment_Tenant_IdAndBookingDateBetween(tenantId, startDate, endDate.getTime());
+        List<Booking> currentBookings = bookingRepository.findAllByTreatments_Tenant_IdAndBookingDateBetween(tenantId, startDate, endDate.getTime());
         List<TimeSlot> reservedTimeSlots = currentBookings.stream()
                 .map(this::bookingToTimeSlot)
                 .toList();

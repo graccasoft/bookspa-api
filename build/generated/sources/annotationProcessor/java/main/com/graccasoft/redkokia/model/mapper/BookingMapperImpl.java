@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-12T19:04:51+0200",
+    date = "2023-06-14T10:02:24+0200",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.5 (Oracle Corporation)"
 )
 @Component
@@ -38,7 +38,7 @@ public class BookingMapperImpl implements BookingMapper {
         booking.setDuration( dto.duration() );
         booking.setStatus( dto.status() );
         booking.setClient( clientDtoToClient( dto.client() ) );
-        booking.setTreatment( treatmentDtoToTreatment( dto.treatment() ) );
+        booking.setTreatments( treatmentDtoListToTreatmentList( dto.treatments() ) );
 
         return booking;
     }
@@ -55,7 +55,7 @@ public class BookingMapperImpl implements BookingMapper {
         Integer duration = null;
         BookingStatus status = null;
         ClientDto client = null;
-        TreatmentDto treatment = null;
+        List<TreatmentDto> treatments = null;
 
         id = entity.getId();
         createdAt = entity.getCreatedAt();
@@ -63,9 +63,9 @@ public class BookingMapperImpl implements BookingMapper {
         duration = entity.getDuration();
         status = entity.getStatus();
         client = clientToClientDto( entity.getClient() );
-        treatment = treatmentToTreatmentDto( entity.getTreatment() );
+        treatments = treatmentListToTreatmentDtoList( entity.getTreatments() );
 
-        BookingDto bookingDto = new BookingDto( id, createdAt, bookingDate, duration, status, client, treatment );
+        BookingDto bookingDto = new BookingDto( id, createdAt, bookingDate, duration, status, client, treatments );
 
         return bookingDto;
     }
@@ -90,14 +90,21 @@ public class BookingMapperImpl implements BookingMapper {
         else {
             entity.setClient( null );
         }
-        if ( dto.treatment() != null ) {
-            if ( entity.getTreatment() == null ) {
-                entity.setTreatment( new Treatment() );
+        if ( entity.getTreatments() != null ) {
+            List<Treatment> list = treatmentDtoListToTreatmentList( dto.treatments() );
+            if ( list != null ) {
+                entity.getTreatments().clear();
+                entity.getTreatments().addAll( list );
             }
-            treatmentDtoToTreatment1( dto.treatment(), entity.getTreatment() );
+            else {
+                entity.setTreatments( null );
+            }
         }
         else {
-            entity.setTreatment( null );
+            List<Treatment> list = treatmentDtoListToTreatmentList( dto.treatments() );
+            if ( list != null ) {
+                entity.setTreatments( list );
+            }
         }
     }
 
@@ -169,6 +176,19 @@ public class BookingMapperImpl implements BookingMapper {
         treatment.setTenant( tenantDtoToTenant( treatmentDto.tenant() ) );
 
         return treatment;
+    }
+
+    protected List<Treatment> treatmentDtoListToTreatmentList(List<TreatmentDto> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<Treatment> list1 = new ArrayList<Treatment>( list.size() );
+        for ( TreatmentDto treatmentDto : list ) {
+            list1.add( treatmentDtoToTreatment( treatmentDto ) );
+        }
+
+        return list1;
     }
 
     protected TenantDto tenantToTenantDto(Tenant tenant) {
@@ -253,6 +273,19 @@ public class BookingMapperImpl implements BookingMapper {
         return treatmentDto;
     }
 
+    protected List<TreatmentDto> treatmentListToTreatmentDtoList(List<Treatment> list) {
+        if ( list == null ) {
+            return null;
+        }
+
+        List<TreatmentDto> list1 = new ArrayList<TreatmentDto>( list.size() );
+        for ( Treatment treatment : list ) {
+            list1.add( treatmentToTreatmentDto( treatment ) );
+        }
+
+        return list1;
+    }
+
     protected void tenantDtoToTenant1(TenantDto tenantDto, Tenant mappingTarget) {
         if ( tenantDto == null ) {
             return;
@@ -285,28 +318,6 @@ public class BookingMapperImpl implements BookingMapper {
                 mappingTarget.setTenant( new Tenant() );
             }
             tenantDtoToTenant1( clientDto.tenant(), mappingTarget.getTenant() );
-        }
-        else {
-            mappingTarget.setTenant( null );
-        }
-    }
-
-    protected void treatmentDtoToTreatment1(TreatmentDto treatmentDto, Treatment mappingTarget) {
-        if ( treatmentDto == null ) {
-            return;
-        }
-
-        mappingTarget.setId( treatmentDto.id() );
-        mappingTarget.setName( treatmentDto.name() );
-        mappingTarget.setDescription( treatmentDto.description() );
-        mappingTarget.setPrice( treatmentDto.price() );
-        mappingTarget.setMinimumDuration( treatmentDto.minimumDuration() );
-        mappingTarget.setMaximumDuration( treatmentDto.maximumDuration() );
-        if ( treatmentDto.tenant() != null ) {
-            if ( mappingTarget.getTenant() == null ) {
-                mappingTarget.setTenant( new Tenant() );
-            }
-            tenantDtoToTenant1( treatmentDto.tenant(), mappingTarget.getTenant() );
         }
         else {
             mappingTarget.setTenant( null );

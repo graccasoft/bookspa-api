@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,6 +28,11 @@ public class Booking {
     @ManyToOne
     private Client client;
 
-    @ManyToOne
-    private Treatment treatment;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "booking_treatment",
+            joinColumns = @JoinColumn(name = "booking_id"),
+            inverseJoinColumns = @JoinColumn(name = "treatment_id")
+    )
+    private List<Treatment> treatments;
 }
