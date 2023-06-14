@@ -14,6 +14,8 @@ public class Treatment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    private TreatmentCategory category;
     private String name;
     private String description;
     private BigDecimal price;

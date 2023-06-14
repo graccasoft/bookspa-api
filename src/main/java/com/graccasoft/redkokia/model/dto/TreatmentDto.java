@@ -9,7 +9,8 @@ public record TreatmentDto(
         BigDecimal price,
         Integer minimumDuration,
         Integer maximumDuration,
-        TenantDto tenant
+        TenantDto tenant,
+        TreatmentCategoryDto category
 
 ) {
 }
