@@ -1,6 +1,7 @@
 package com.graccasoft.redkokia.controller;
 
 import com.graccasoft.redkokia.model.dto.BookingDto;
+import com.graccasoft.redkokia.model.dto.CategorisedTreatmentsDto;
 import com.graccasoft.redkokia.model.dto.TimeSlot;
 import com.graccasoft.redkokia.model.dto.TreatmentDto;
 import com.graccasoft.redkokia.service.BookingService;
@@ -37,5 +38,10 @@ public class OnlineBookingController {
     @GetMapping("/treatments")
     public List<TreatmentDto> getTreatments(@RequestParam Long tenantId){
         return treatmentService.getTreatments(tenantId);
+    }
+
+    @GetMapping("/categorised-treatments")
+    public List<CategorisedTreatmentsDto> getCategorisedTreatments(@RequestParam Long tenantId){
+        return treatmentService.getCategorisedTreatments(tenantId);
     }
 }

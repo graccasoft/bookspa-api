@@ -35,4 +35,6 @@ public class Booking {
             inverseJoinColumns = @JoinColumn(name = "treatment_id")
     )
     private List<Treatment> treatments;
+
+    private String clientNotes;
 }

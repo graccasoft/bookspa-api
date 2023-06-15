@@ -12,6 +12,7 @@ public record BookingDto(
         Integer duration,
         BookingStatus status,
         ClientDto client,
-        List<TreatmentDto> treatments
+        List<TreatmentDto> treatments,
+        String clientNotes
 ) {
 }
