@@ -37,4 +37,5 @@ public class Booking {
     private List<Treatment> treatments;
 
     private String clientNotes;
+    private String reference;
 }

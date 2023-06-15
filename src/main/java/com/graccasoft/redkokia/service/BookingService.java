@@ -11,13 +11,12 @@ import com.graccasoft.redkokia.repository.BookingRepository;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -29,6 +28,8 @@ public class BookingService {
     private final ClientService clientService;
     private final ClientMapper clientMapper;
     private final FreeTimeFinderService freeTimeFinderService;
+    private final SpringTemplateEngine springTemplateEngine;
+    private final EmailSenderService emailSenderService;
 
     public BookingDto saveBooking(BookingDto bookingDto){
         //todo validate dates, etc
@@ -40,9 +41,32 @@ public class BookingService {
             client = clientMapper.toEntity( clientService.saveClient(bookingDto.client()) );
         }
         booking.setClient( client );
+        booking.setReference(generateBookingReference());
         Booking savedBooking = bookingRepository.save( booking );
+
+        sendBookingEmail(savedBooking);
         return bookingMapper.toDto( savedBooking );
 
+    }
+
+    private String generateBookingReference(){
+        String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder sb = new StringBuilder();
+        Random random = new Random();
+        for (int i = 0; i < 6; i++) {
+            int index = random.nextInt(candidateChars.length());
+            sb.append(candidateChars.charAt(index));
+        }
+        return sb.toString();
+    }
+
+    private void sendBookingEmail(Booking booking){
+        Context emailContext = new Context();
+        emailContext.setVariable("booking", booking);
+        emailContext.setVariable("tenant", booking.getTreatments().get(0).getTenant());
+        final String htmlContent = this.springTemplateEngine.process("customer-booking-email", emailContext);
+
+        emailSenderService.sendEmail(booking.getClient().getEmail(), "Your Booking on RedKokia", htmlContent);
     }
 
     public List<BookingDto> getBookings(Long tenantId){

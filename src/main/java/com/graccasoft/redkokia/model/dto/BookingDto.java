@@ -13,6 +13,7 @@ public record BookingDto(
         BookingStatus status,
         ClientDto client,
         List<TreatmentDto> treatments,
-        String clientNotes
+        String clientNotes,
+        String reference
 ) {
 }

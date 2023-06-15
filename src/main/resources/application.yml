@@ -11,6 +11,18 @@ spring:
     hibernate:
       ddlAuto: update
 
+  mail:
+    host: ${RK_SMTP_HOST}
+    port: ${RK_SMTP_PORT}
+    username: ${RK_SMTP_USERNAME}
+    password: ${RK_SMTP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 jwt:
   private.key: classpath:app.key
   public.key: classpath:app.pub
@@ -20,3 +32,8 @@ logging:
     org:
       springframework:
         security: DEBUG
+
+redkokia:
+  senderEmail: notifications@redkokia.com
+  bccEmail: gracious.mashasha@gmail.com
+

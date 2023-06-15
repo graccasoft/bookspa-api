@@ -39,6 +39,9 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 
+	implementation("org.springframework.boot:spring-boot-starter-mail")
+	implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
+
 }
 
 tasks.withType<Test> {
