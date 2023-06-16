@@ -49,6 +49,7 @@ public class BookingService {
 
     }
 
+    //todo add this to a utility or helper class
     private String generateBookingReference(){
         String candidateChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         StringBuilder sb = new StringBuilder();

@@ -22,5 +22,6 @@ public class Tenant {
     private String companyAddress;
     private String contactName;
     private String contactPhone;
+    private String reference;
 
 }
