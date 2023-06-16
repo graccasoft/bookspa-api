@@ -12,6 +12,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -32,9 +34,12 @@ public class UserService {
         user.setEnabled(true);
         user.setAccountNonLocked(true);
         user.setAccountNonExpired(true);
-        user.setRole("TENANT");
 
         userRepository.save(user);
+    }
+
+    public List<RegisterUserDto> getTenantUsers(Long tenantId){
+        return userMapper.toDtoList( userRepository.findAllByTenant_Id(tenantId) );
     }
 
     public JwtDto getUserJwt(String username, String token){
@@ -46,6 +51,7 @@ public class UserService {
                 .token(token)
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
+                .role(user.getRole())
                 .tenant(tenantMapper.toDto(user.getTenant()))
                 .build();
     }

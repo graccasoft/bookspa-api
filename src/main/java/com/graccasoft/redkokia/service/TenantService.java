@@ -20,7 +20,7 @@ public class TenantService {
 
     public TenantDto saveTenant(TenantDto tenantDto){
         Tenant tenant = tenantMapper.toEntity(tenantDto);
-        if( tenant.getReference() == null ){
+        if( tenant.getReference() == null || tenant.getReference().isEmpty() ){
             tenant.setReference( generateTenantReference() );
         }
         return tenantMapper.toDto( tenantRepository.save( tenant  )  );
@@ -31,6 +31,12 @@ public class TenantService {
         return tenantMapper.toDtoList( tenantRepository.findAll() );
     }
 
+    public TenantDto getTenant(Long tenantId){
+        Tenant tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(()->new EntityNotFoundException("Tenant not found"));
+
+        return tenantMapper.toDto(tenant);
+    }
     public TenantDto findByReference(String reference){
         Tenant tenant = tenantRepository.findByReference(reference)
                 .orElseThrow(()->new EntityNotFoundException("Tenant with provided reference not found"));

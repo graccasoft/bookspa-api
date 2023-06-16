@@ -11,6 +11,7 @@ public class JwtDto {
     private Long id;
     private String firstName;
     private String lastName;
+    private String role;
     private TenantDto tenant;
     private String token;
 }

@@ -23,5 +23,7 @@ public class Tenant {
     private String contactName;
     private String contactPhone;
     private String reference;
+    private String openingTime;
+    private String closingTime;
 
 }

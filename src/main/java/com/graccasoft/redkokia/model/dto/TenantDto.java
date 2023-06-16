@@ -7,6 +7,9 @@ public record TenantDto(
         String companyEmail,
         String companyAddress,
         String contactName,
-        String contactPhone
+        String contactPhone,
+        String reference,
+        String openingTime,
+        String closingTime
 ) {
 }
