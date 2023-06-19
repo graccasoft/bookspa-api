@@ -90,13 +90,14 @@ public class BookingService {
         bookingRepository.save(booking);
     }
 
-    public List<TimeSlot> getAvailableTimeSlots(Date startDate, Long tenantId, Integer duration){
+    public List<TimeSlot> getAvailableTimeSlots(Date startDate, Long tenantId, Long employeeId, Integer duration){
         Calendar endDate = Calendar.getInstance();
         endDate.setTime(startDate);
         endDate.set(Calendar.HOUR, 23);
         endDate.set(Calendar.MINUTE, 59);
 
-        List<Booking> currentBookings = bookingRepository.findAllByTreatments_Tenant_IdAndBookingDateBetween(tenantId, startDate, endDate.getTime());
+        List<Booking> currentBookings = bookingRepository
+                .findAllByTreatments_Tenant_IdAndEmployee_IdAndBookingDateBetween(tenantId,employeeId, startDate, endDate.getTime());
         List<TimeSlot> reservedTimeSlots = currentBookings.stream()
                 .map(this::bookingToTimeSlot)
                 .toList();

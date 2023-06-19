@@ -2,12 +2,16 @@ package com.graccasoft.redkokia.model.mapper;
 
 import com.graccasoft.redkokia.model.dto.BookingDto;
 import com.graccasoft.redkokia.model.dto.ClientDto;
+import com.graccasoft.redkokia.model.dto.EmployeeDto;
 import com.graccasoft.redkokia.model.dto.TenantDto;
+import com.graccasoft.redkokia.model.dto.TreatmentCategoryDto;
 import com.graccasoft.redkokia.model.dto.TreatmentDto;
 import com.graccasoft.redkokia.model.entity.Booking;
 import com.graccasoft.redkokia.model.entity.Client;
+import com.graccasoft.redkokia.model.entity.Employee;
 import com.graccasoft.redkokia.model.entity.Tenant;
 import com.graccasoft.redkokia.model.entity.Treatment;
+import com.graccasoft.redkokia.model.entity.TreatmentCategory;
 import com.graccasoft.redkokia.model.enums.BookingStatus;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -18,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-14T10:02:24+0200",
+    date = "2023-06-19T12:19:12+0200",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.5 (Oracle Corporation)"
 )
 @Component
@@ -39,6 +43,9 @@ public class BookingMapperImpl implements BookingMapper {
         booking.setStatus( dto.status() );
         booking.setClient( clientDtoToClient( dto.client() ) );
         booking.setTreatments( treatmentDtoListToTreatmentList( dto.treatments() ) );
+        booking.setClientNotes( dto.clientNotes() );
+        booking.setReference( dto.reference() );
+        booking.setEmployee( employeeDtoToEmployee( dto.employee() ) );
 
         return booking;
     }
@@ -56,6 +63,9 @@ public class BookingMapperImpl implements BookingMapper {
         BookingStatus status = null;
         ClientDto client = null;
         List<TreatmentDto> treatments = null;
+        String clientNotes = null;
+        String reference = null;
+        EmployeeDto employee = null;
 
         id = entity.getId();
         createdAt = entity.getCreatedAt();
@@ -64,8 +74,11 @@ public class BookingMapperImpl implements BookingMapper {
         status = entity.getStatus();
         client = clientToClientDto( entity.getClient() );
         treatments = treatmentListToTreatmentDtoList( entity.getTreatments() );
+        clientNotes = entity.getClientNotes();
+        reference = entity.getReference();
+        employee = employeeToEmployeeDto( entity.getEmployee() );
 
-        BookingDto bookingDto = new BookingDto( id, createdAt, bookingDate, duration, status, client, treatments );
+        BookingDto bookingDto = new BookingDto( id, createdAt, bookingDate, duration, status, client, treatments, clientNotes, reference, employee );
 
         return bookingDto;
     }
@@ -106,6 +119,17 @@ public class BookingMapperImpl implements BookingMapper {
                 entity.setTreatments( list );
             }
         }
+        entity.setClientNotes( dto.clientNotes() );
+        entity.setReference( dto.reference() );
+        if ( dto.employee() != null ) {
+            if ( entity.getEmployee() == null ) {
+                entity.setEmployee( new Employee() );
+            }
+            employeeDtoToEmployee1( dto.employee(), entity.getEmployee() );
+        }
+        else {
+            entity.setEmployee( null );
+        }
     }
 
     @Override
@@ -136,6 +160,9 @@ public class BookingMapperImpl implements BookingMapper {
         tenant.setCompanyAddress( tenantDto.companyAddress() );
         tenant.setContactName( tenantDto.contactName() );
         tenant.setContactPhone( tenantDto.contactPhone() );
+        tenant.setReference( tenantDto.reference() );
+        tenant.setOpeningTime( tenantDto.openingTime() );
+        tenant.setClosingTime( tenantDto.closingTime() );
 
         return tenant;
     }
@@ -160,6 +187,19 @@ public class BookingMapperImpl implements BookingMapper {
         return client;
     }
 
+    protected TreatmentCategory treatmentCategoryDtoToTreatmentCategory(TreatmentCategoryDto treatmentCategoryDto) {
+        if ( treatmentCategoryDto == null ) {
+            return null;
+        }
+
+        TreatmentCategory treatmentCategory = new TreatmentCategory();
+
+        treatmentCategory.setId( treatmentCategoryDto.id() );
+        treatmentCategory.setName( treatmentCategoryDto.name() );
+
+        return treatmentCategory;
+    }
+
     protected Treatment treatmentDtoToTreatment(TreatmentDto treatmentDto) {
         if ( treatmentDto == null ) {
             return null;
@@ -168,6 +208,7 @@ public class BookingMapperImpl implements BookingMapper {
         Treatment treatment = new Treatment();
 
         treatment.setId( treatmentDto.id() );
+        treatment.setCategory( treatmentCategoryDtoToTreatmentCategory( treatmentDto.category() ) );
         treatment.setName( treatmentDto.name() );
         treatment.setDescription( treatmentDto.description() );
         treatment.setPrice( treatmentDto.price() );
@@ -191,6 +232,23 @@ public class BookingMapperImpl implements BookingMapper {
         return list1;
     }
 
+    protected Employee employeeDtoToEmployee(EmployeeDto employeeDto) {
+        if ( employeeDto == null ) {
+            return null;
+        }
+
+        Employee employee = new Employee();
+
+        employee.setId( employeeDto.id() );
+        employee.setFirstName( employeeDto.firstName() );
+        employee.setSurname( employeeDto.surname() );
+        employee.setPhoneNumber( employeeDto.phoneNumber() );
+        employee.setIsAvailable( employeeDto.isAvailable() );
+        employee.setTenant( tenantDtoToTenant( employeeDto.tenant() ) );
+
+        return employee;
+    }
+
     protected TenantDto tenantToTenantDto(Tenant tenant) {
         if ( tenant == null ) {
             return null;
@@ -203,6 +261,9 @@ public class BookingMapperImpl implements BookingMapper {
         String companyAddress = null;
         String contactName = null;
         String contactPhone = null;
+        String reference = null;
+        String openingTime = null;
+        String closingTime = null;
 
         id = tenant.getId();
         companyName = tenant.getCompanyName();
@@ -211,8 +272,11 @@ public class BookingMapperImpl implements BookingMapper {
         companyAddress = tenant.getCompanyAddress();
         contactName = tenant.getContactName();
         contactPhone = tenant.getContactPhone();
+        reference = tenant.getReference();
+        openingTime = tenant.getOpeningTime();
+        closingTime = tenant.getClosingTime();
 
-        TenantDto tenantDto = new TenantDto( id, companyName, companyPhone, companyEmail, companyAddress, contactName, contactPhone );
+        TenantDto tenantDto = new TenantDto( id, companyName, companyPhone, companyEmail, companyAddress, contactName, contactPhone, reference, openingTime, closingTime );
 
         return tenantDto;
     }
@@ -247,6 +311,22 @@ public class BookingMapperImpl implements BookingMapper {
         return clientDto;
     }
 
+    protected TreatmentCategoryDto treatmentCategoryToTreatmentCategoryDto(TreatmentCategory treatmentCategory) {
+        if ( treatmentCategory == null ) {
+            return null;
+        }
+
+        Long id = null;
+        String name = null;
+
+        id = treatmentCategory.getId();
+        name = treatmentCategory.getName();
+
+        TreatmentCategoryDto treatmentCategoryDto = new TreatmentCategoryDto( id, name );
+
+        return treatmentCategoryDto;
+    }
+
     protected TreatmentDto treatmentToTreatmentDto(Treatment treatment) {
         if ( treatment == null ) {
             return null;
@@ -259,6 +339,7 @@ public class BookingMapperImpl implements BookingMapper {
         Integer minimumDuration = null;
         Integer maximumDuration = null;
         TenantDto tenant = null;
+        TreatmentCategoryDto category = null;
 
         id = treatment.getId();
         name = treatment.getName();
@@ -267,8 +348,9 @@ public class BookingMapperImpl implements BookingMapper {
         minimumDuration = treatment.getMinimumDuration();
         maximumDuration = treatment.getMaximumDuration();
         tenant = tenantToTenantDto( treatment.getTenant() );
+        category = treatmentCategoryToTreatmentCategoryDto( treatment.getCategory() );
 
-        TreatmentDto treatmentDto = new TreatmentDto( id, name, description, price, minimumDuration, maximumDuration, tenant );
+        TreatmentDto treatmentDto = new TreatmentDto( id, name, description, price, minimumDuration, maximumDuration, tenant, category );
 
         return treatmentDto;
     }
@@ -286,6 +368,30 @@ public class BookingMapperImpl implements BookingMapper {
         return list1;
     }
 
+    protected EmployeeDto employeeToEmployeeDto(Employee employee) {
+        if ( employee == null ) {
+            return null;
+        }
+
+        Long id = null;
+        String firstName = null;
+        String surname = null;
+        String phoneNumber = null;
+        Boolean isAvailable = null;
+        TenantDto tenant = null;
+
+        id = employee.getId();
+        firstName = employee.getFirstName();
+        surname = employee.getSurname();
+        phoneNumber = employee.getPhoneNumber();
+        isAvailable = employee.getIsAvailable();
+        tenant = tenantToTenantDto( employee.getTenant() );
+
+        EmployeeDto employeeDto = new EmployeeDto( id, firstName, surname, phoneNumber, isAvailable, tenant );
+
+        return employeeDto;
+    }
+
     protected void tenantDtoToTenant1(TenantDto tenantDto, Tenant mappingTarget) {
         if ( tenantDto == null ) {
             return;
@@ -298,6 +404,9 @@ public class BookingMapperImpl implements BookingMapper {
         mappingTarget.setCompanyAddress( tenantDto.companyAddress() );
         mappingTarget.setContactName( tenantDto.contactName() );
         mappingTarget.setContactPhone( tenantDto.contactPhone() );
+        mappingTarget.setReference( tenantDto.reference() );
+        mappingTarget.setOpeningTime( tenantDto.openingTime() );
+        mappingTarget.setClosingTime( tenantDto.closingTime() );
     }
 
     protected void clientDtoToClient1(ClientDto clientDto, Client mappingTarget) {
@@ -318,6 +427,27 @@ public class BookingMapperImpl implements BookingMapper {
                 mappingTarget.setTenant( new Tenant() );
             }
             tenantDtoToTenant1( clientDto.tenant(), mappingTarget.getTenant() );
+        }
+        else {
+            mappingTarget.setTenant( null );
+        }
+    }
+
+    protected void employeeDtoToEmployee1(EmployeeDto employeeDto, Employee mappingTarget) {
+        if ( employeeDto == null ) {
+            return;
+        }
+
+        mappingTarget.setId( employeeDto.id() );
+        mappingTarget.setFirstName( employeeDto.firstName() );
+        mappingTarget.setSurname( employeeDto.surname() );
+        mappingTarget.setPhoneNumber( employeeDto.phoneNumber() );
+        mappingTarget.setIsAvailable( employeeDto.isAvailable() );
+        if ( employeeDto.tenant() != null ) {
+            if ( mappingTarget.getTenant() == null ) {
+                mappingTarget.setTenant( new Tenant() );
+            }
+            tenantDtoToTenant1( employeeDto.tenant(), mappingTarget.getTenant() );
         }
         else {
             mappingTarget.setTenant( null );

@@ -38,4 +38,7 @@ public class Booking {
 
     private String clientNotes;
     private String reference;
+
+    @ManyToOne
+    private Employee employee;
 }
