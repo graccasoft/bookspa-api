@@ -15,6 +15,7 @@ public record BookingDto(
         List<TreatmentDto> treatments,
         String clientNotes,
         String reference,
-        EmployeeDto employee
+        EmployeeDto employee,
+        String paymentMethod
 ) {
 }

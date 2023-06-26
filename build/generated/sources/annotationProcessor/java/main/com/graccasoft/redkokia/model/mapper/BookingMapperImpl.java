@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-19T12:19:12+0200",
+    date = "2023-06-25T12:00:05+0200",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.5 (Oracle Corporation)"
 )
 @Component
@@ -46,6 +46,7 @@ public class BookingMapperImpl implements BookingMapper {
         booking.setClientNotes( dto.clientNotes() );
         booking.setReference( dto.reference() );
         booking.setEmployee( employeeDtoToEmployee( dto.employee() ) );
+        booking.setPaymentMethod( dto.paymentMethod() );
 
         return booking;
     }
@@ -66,6 +67,7 @@ public class BookingMapperImpl implements BookingMapper {
         String clientNotes = null;
         String reference = null;
         EmployeeDto employee = null;
+        String paymentMethod = null;
 
         id = entity.getId();
         createdAt = entity.getCreatedAt();
@@ -77,8 +79,9 @@ public class BookingMapperImpl implements BookingMapper {
         clientNotes = entity.getClientNotes();
         reference = entity.getReference();
         employee = employeeToEmployeeDto( entity.getEmployee() );
+        paymentMethod = entity.getPaymentMethod();
 
-        BookingDto bookingDto = new BookingDto( id, createdAt, bookingDate, duration, status, client, treatments, clientNotes, reference, employee );
+        BookingDto bookingDto = new BookingDto( id, createdAt, bookingDate, duration, status, client, treatments, clientNotes, reference, employee, paymentMethod );
 
         return bookingDto;
     }
@@ -130,6 +133,7 @@ public class BookingMapperImpl implements BookingMapper {
         else {
             entity.setEmployee( null );
         }
+        entity.setPaymentMethod( dto.paymentMethod() );
     }
 
     @Override

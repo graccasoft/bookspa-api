@@ -42,9 +42,6 @@ public class SecurityConfig {
         // @formatter:off
         http
                 .authorizeHttpRequests((authorize) -> authorize
-                        //preflight requests
-                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
-                        .requestMatchers(HttpMethod.DELETE).permitAll()
 
                         .requestMatchers ("/token","/online-booking/**","/users").permitAll()
                         .anyRequest().authenticated()

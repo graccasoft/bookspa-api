@@ -1,6 +1,7 @@
 package com.graccasoft.redkokia.controller;
 
 import com.graccasoft.redkokia.model.dto.BookingDto;
+import com.graccasoft.redkokia.model.dto.GenericResponse;
 import com.graccasoft.redkokia.service.BookingService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -27,5 +28,11 @@ public class BookingController {
     @DeleteMapping("{bookingId}")
     public void cancelBooking(@PathVariable Long bookingId){
         bookingService.cancelBooking(bookingId);
+    }
+
+    @PatchMapping
+    public GenericResponse updatePaymentMethod(@RequestBody BookingDto bookingDto){
+        bookingService.updatePaymentMethod (bookingDto);
+        return new GenericResponse(true,"Booking payment method successfully updated");
     }
 }

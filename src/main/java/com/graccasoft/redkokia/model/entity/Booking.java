@@ -41,4 +41,6 @@ public class Booking {
 
     @ManyToOne
     private Employee employee;
+
+    private String paymentMethod;
 }

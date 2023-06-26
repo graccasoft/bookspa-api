@@ -5,9 +5,11 @@ import com.graccasoft.redkokia.model.dto.BookingDto;
 import com.graccasoft.redkokia.model.dto.TimeSlot;
 import com.graccasoft.redkokia.model.entity.Booking;
 import com.graccasoft.redkokia.model.entity.Client;
+import com.graccasoft.redkokia.model.enums.BookingStatus;
 import com.graccasoft.redkokia.model.mapper.BookingMapper;
 import com.graccasoft.redkokia.model.mapper.ClientMapper;
 import com.graccasoft.redkokia.repository.BookingRepository;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -70,6 +72,15 @@ public class BookingService {
         emailSenderService.sendEmail(booking.getClient().getEmail(), "Your Booking on RedKokia", htmlContent);
     }
 
+    private void sendCancelledBookingEmail(Booking booking){
+        Context emailContext = new Context();
+        emailContext.setVariable("booking", booking);
+        emailContext.setVariable("tenant", booking.getTreatments().get(0).getTenant());
+        final String htmlContent = this.springTemplateEngine.process("customer-booking-cancelled-email", emailContext);
+
+        emailSenderService.sendEmail(booking.getClient().getEmail(), "Your Booking on RedKokia", htmlContent);
+    }
+
     public List<BookingDto> getBookings(Long tenantId){
         return bookingMapper.toDtoList( bookingRepository.findAllByTreatments_Tenant_Id(tenantId) );
     }
@@ -82,11 +93,28 @@ public class BookingService {
         );
     }
 
+    public BookingDto getBooking(String reference){
+        return bookingMapper.toDto(
+                bookingRepository
+                        .findByReference(reference)
+                        .orElseThrow(()-> new RecordDoesNotExistException("Booking with ID not found"))
+        );
+    }
+
     public void updateStatus(BookingDto bookingDto){
         Booking booking = bookingRepository.findById(bookingDto.id())
                 .orElseThrow(()-> new RecordDoesNotExistException("Booking with ID not found"));
 
         booking.setStatus( bookingDto.status() );
+        bookingRepository.save(booking);
+    }
+
+    public void updatePaymentMethod(BookingDto bookingDto){
+        Booking booking = bookingRepository.findById(bookingDto.id())
+                .orElseThrow(()-> new RecordDoesNotExistException("Booking with ID not found"));
+
+        booking.setPaymentMethod ( bookingDto.paymentMethod());
+        booking.setStatus(BookingStatus.CONFIRMED);
         bookingRepository.save(booking);
     }
 
@@ -119,8 +147,18 @@ public class BookingService {
         return new TimeSlot(startTime, endTime);
     }
 
+    @Transactional
+    public void cancelBooking(String reference){
+        Booking booking = bookingRepository.findByReference (reference).
+                orElseThrow(()-> new RecordDoesNotExistException("Booking not found"));
+        sendCancelledBookingEmail(booking);
+        bookingRepository.deleteByReference(reference);
+    }
 
     public void cancelBooking(Long bookingId){
+        Booking booking = bookingRepository.findById(bookingId).
+                orElseThrow(()-> new RecordDoesNotExistException("Booking not found"));
+        sendCancelledBookingEmail(booking);
         bookingRepository.deleteById(bookingId);
     }
 }

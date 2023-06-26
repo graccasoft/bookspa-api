@@ -11,7 +11,7 @@
     Dear <strong th:text="${booking.client.firstName}"></strong>
 </p>
 <p>
-    Please find below the details for your booking with <span th:text="${tenant.companyName}"></span>
+    You have cancelled the following booking with <span th:text="${tenant.companyName}"></span>
 </p>
 <p>Booking reference number: <strong th:text="${booking.reference}"></strong></p>
 
@@ -34,47 +34,7 @@
             <strong th:text="${booking.bookingDate}"></strong>
         </div>
     </div>
-    <hr/>
-    <table width="100%">
-        <tr>
-            <td>
-                Your Name:<br/>
-                <strong th:text="${booking.client.firstName + ' ' + booking.client.surname}"></strong>
-            </td>
-            <td>
-                Email:<br/>
-                <strong th:text="${booking.client.email}"></strong>
-            </td>
 
-        </tr>
-        <tr>
-            <td>
-                Phone Number:<br/>
-                <strong th:text="${booking.client.phoneNumber}"></strong>
-            </td>
-            <td>
-                Address:<br/>
-                <strong th:text="${booking.client.address}"></strong>
-            </td>
-        </tr>
-    </table>
-
-
-    <div class="row">
-        <div class="col-md-12">
-            Your Request:<br/>
-            <strong th:text="${booking.clientNotes}"></strong>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-md-12">
-            To cancel this booking, visit this link:<br>
-            <a href="@{https://app.redkokia.com/booking/${booking.reference}}">
-                https://app.redkokia.com/booking/<span th:text="${booking.reference}"></span>
-            </a>
-        </div>
-    </div>
 
 </div>
 

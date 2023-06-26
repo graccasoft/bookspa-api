@@ -57,4 +57,15 @@ public class OnlineBookingController {
     public List<EmployeeDto> getEmployees(@RequestParam Long tenantId){
         return employeeService.getEmployees(tenantId);
     }
+
+    @GetMapping("/bookings/{reference}")
+    public BookingDto findBooking(@PathVariable String reference){
+        return bookingService.getBooking(reference);
+    }
+
+    @DeleteMapping("/bookings/{reference}")
+    public GenericResponse cancelBooking(@PathVariable String reference){
+        bookingService.cancelBooking (reference);
+        return new GenericResponse(true, "Booking has been successfully cancelled");
+    }
 }
