@@ -2,11 +2,13 @@ package com.graccasoft.redkokia.service;
 
 import com.graccasoft.redkokia.exception.RecordDoesNotExistException;
 import com.graccasoft.redkokia.model.dto.BookingDto;
+import com.graccasoft.redkokia.model.dto.BookingReportDto;
 import com.graccasoft.redkokia.model.dto.TimeSlot;
 import com.graccasoft.redkokia.model.entity.Booking;
 import com.graccasoft.redkokia.model.entity.Client;
 import com.graccasoft.redkokia.model.enums.BookingStatus;
 import com.graccasoft.redkokia.model.mapper.BookingMapper;
+import com.graccasoft.redkokia.model.mapper.BookingReportMapper;
 import com.graccasoft.redkokia.model.mapper.ClientMapper;
 import com.graccasoft.redkokia.repository.BookingRepository;
 import jakarta.transaction.Transactional;
@@ -16,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import java.awt.print.Pageable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
@@ -32,6 +35,7 @@ public class BookingService {
     private final FreeTimeFinderService freeTimeFinderService;
     private final SpringTemplateEngine springTemplateEngine;
     private final EmailSenderService emailSenderService;
+    private final BookingReportMapper bookingReportMapper;
 
     public BookingDto saveBooking(BookingDto bookingDto){
         //todo validate dates, etc
@@ -160,5 +164,12 @@ public class BookingService {
                 orElseThrow(()-> new RecordDoesNotExistException("Booking not found"));
         sendCancelledBookingEmail(booking);
         bookingRepository.deleteById(bookingId);
+    }
+
+    public List<BookingReportDto> bookingsReport(Long tenantId, Date startDate, Date endDate){
+        return bookingRepository.findAllByTreatments_Tenant_IdAndBookingDateBetween(tenantId, startDate, endDate)
+                .stream()
+                .map(bookingReportMapper)
+                .toList();
     }
 }
