@@ -8,5 +8,6 @@ import java.util.List;
 public interface TreatmentRepository extends JpaRepository<Treatment, Long> {
 
     List<Treatment> findAllByTenant_Id(Long tenantId);
+    List<Treatment> findAllByTenant_IdAndIsPromotion(Long tenantId, Boolean isPromotion);
     List<Treatment> findAllByTenant_IdAndCategory_id(Long tenantId, Long categoryId);
 }

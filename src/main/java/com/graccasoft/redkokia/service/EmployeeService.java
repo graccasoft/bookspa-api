@@ -1,5 +1,6 @@
 package com.graccasoft.redkokia.service;
 
+import com.graccasoft.redkokia.exception.RecordDoesNotExistException;
 import com.graccasoft.redkokia.model.dto.EmployeeDto;
 import com.graccasoft.redkokia.model.entity.Employee;
 import com.graccasoft.redkokia.model.mapper.EmployeeMapper;
@@ -23,5 +24,16 @@ public class EmployeeService {
 
     public List<EmployeeDto> getEmployees(Long tenantId){
         return employeeMapper.toDtoList( employeeRepository.findAllByTenant_Id(tenantId) );
+    }
+    public List<EmployeeDto> getEmployees(Long tenantId, boolean availability){
+        return employeeMapper.toDtoList( employeeRepository.findAllByTenant_IdAndIsAvailable(tenantId, availability) );
+    }
+
+    public void toggleAvailability(EmployeeDto employeeDto){
+        Employee employee = employeeRepository.findById(employeeDto.id())
+                .orElseThrow(()-> new RecordDoesNotExistException("Employee not found"));
+
+        employee.setIsAvailable( employeeDto.isAvailable() );
+        employeeRepository.save(employee);
     }
 }

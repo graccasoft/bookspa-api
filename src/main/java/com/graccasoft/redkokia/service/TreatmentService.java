@@ -8,6 +8,7 @@ import com.graccasoft.redkokia.model.mapper.TreatmentCategoryMapper;
 import com.graccasoft.redkokia.model.mapper.TreatmentMapper;
 import com.graccasoft.redkokia.repository.TreatmentCategoryRepository;
 import com.graccasoft.redkokia.repository.TreatmentRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,14 @@ public class TreatmentService {
     }
 
     public List<TreatmentDto> getTreatments(Long tenantId){
+        return treatmentMapper.toDtoList( treatmentRepository.findAllByTenant_IdAndIsPromotion(tenantId, Boolean.FALSE) );
+    }
+
+    public List<TreatmentDto> getPromotions(Long tenantId){
+        return treatmentMapper.toDtoList( treatmentRepository.findAllByTenant_IdAndIsPromotion(tenantId, Boolean.TRUE) );
+    }
+
+    public List<TreatmentDto> getPromotionsAndTreatments(Long tenantId){
         return treatmentMapper.toDtoList( treatmentRepository.findAllByTenant_Id(tenantId) );
     }
 
@@ -41,5 +50,10 @@ public class TreatmentService {
         });
 
         return categorisedTreatmentsDtos;
+    }
+
+    @Transactional
+    public void deleteTreatment(Long id){
+        this.treatmentRepository.deleteById(id);
     }
 }

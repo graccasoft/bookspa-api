@@ -40,7 +40,7 @@ public class OnlineBookingController {
 
     @GetMapping("/treatments")
     public List<TreatmentDto> getTreatments(@RequestParam Long tenantId){
-        return treatmentService.getTreatments(tenantId);
+        return treatmentService.getPromotionsAndTreatments(tenantId);
     }
 
     @GetMapping("/categorised-treatments")
@@ -55,7 +55,7 @@ public class OnlineBookingController {
 
     @GetMapping("/employees")
     public List<EmployeeDto> getEmployees(@RequestParam Long tenantId){
-        return employeeService.getEmployees(tenantId);
+        return employeeService.getEmployees(tenantId, true);
     }
 
     @GetMapping("/bookings/{reference}")

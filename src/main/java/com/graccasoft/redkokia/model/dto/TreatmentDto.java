@@ -10,7 +10,8 @@ public record TreatmentDto(
         Integer minimumDuration,
         Integer maximumDuration,
         TenantDto tenant,
-        TreatmentCategoryDto category
+        TreatmentCategoryDto category,
+        Boolean isPromotion
 
 ) {
 }

@@ -131,6 +131,7 @@ public class BookingService {
         List<Booking> currentBookings = bookingRepository
                 .findAllByTreatments_Tenant_IdAndEmployee_IdAndBookingDateBetween(tenantId,employeeId, startDate, endDate.getTime());
         List<TimeSlot> reservedTimeSlots = currentBookings.stream()
+                .filter(booking -> booking.getStatus() != BookingStatus.CANCELLED)
                 .map(this::bookingToTimeSlot)
                 .toList();
 
@@ -156,18 +157,20 @@ public class BookingService {
         Booking booking = bookingRepository.findByReference (reference).
                 orElseThrow(()-> new RecordDoesNotExistException("Booking not found"));
         sendCancelledBookingEmail(booking);
-        bookingRepository.deleteByReference(reference);
+        booking.setStatus( BookingStatus.CANCELLED );
+        bookingRepository.save(booking);
     }
 
     public void cancelBooking(Long bookingId){
         Booking booking = bookingRepository.findById(bookingId).
                 orElseThrow(()-> new RecordDoesNotExistException("Booking not found"));
         sendCancelledBookingEmail(booking);
-        bookingRepository.deleteById(bookingId);
+        booking.setStatus( BookingStatus.CANCELLED );
+        bookingRepository.save(booking);
     }
 
     public List<BookingReportDto> bookingsReport(Long tenantId, Date startDate, Date endDate){
-        return bookingRepository.findAllByTreatments_Tenant_IdAndBookingDateBetween(tenantId, startDate, endDate)
+        return bookingRepository.findAllByTreatments_Tenant_IdAndCreatedAtBetween(tenantId, startDate, endDate)
                 .stream()
                 .map(bookingReportMapper)
                 .toList();

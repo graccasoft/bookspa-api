@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Getter
@@ -24,4 +25,9 @@ public class Treatment {
 
     @ManyToOne
     private Tenant tenant;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    private List<Booking> bookingList;
+
+    private Boolean isPromotion = false;
 }
