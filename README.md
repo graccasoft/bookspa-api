@@ -1,10 +1,11 @@
 # RedKokia Backend API
 RedKokia Spa Reservation Backend
+
 https://redkokia.com/
 
 ## Technologies
 * Spring Boot 3.0.6
-* MySQQL
+* MySQL
 
 ## Getting Started
 To get started with this project, you will need to have the following installed on your local machine:
