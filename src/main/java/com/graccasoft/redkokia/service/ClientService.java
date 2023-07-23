@@ -1,5 +1,6 @@
 package com.graccasoft.redkokia.service;
 
+import com.graccasoft.redkokia.exception.RecordDoesNotExistException;
 import com.graccasoft.redkokia.model.dto.ClientDto;
 import com.graccasoft.redkokia.model.entity.Client;
 import com.graccasoft.redkokia.model.mapper.ClientMapper;
@@ -26,7 +27,14 @@ public class ClientService  {
     }
 
     public List<ClientDto> getTenantClients(Long tenantId){
-        return clientMapper.toDtoList( clientRepository.findAllByTenant_Id(tenantId) );
+        return clientMapper.toDtoList( clientRepository.findAllByTenant_Id(tenantId).stream().filter(client -> !client.getIsDeleted()).toList() );
     }
 
+    public void deleteClient(Long clientId){
+        Client client = clientRepository.findById(clientId)
+                .orElseThrow(()-> new RecordDoesNotExistException("Client with ID not found"));
+
+        client.setIsDeleted(true);
+        clientRepository.save(client);
+    }
 }

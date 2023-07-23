@@ -1,6 +1,8 @@
 package com.graccasoft.redkokia.service;
 
+import com.graccasoft.redkokia.exception.RecordDoesNotExistException;
 import com.graccasoft.redkokia.model.dto.TenantDto;
+import com.graccasoft.redkokia.model.entity.Employee;
 import com.graccasoft.redkokia.model.entity.Tenant;
 import com.graccasoft.redkokia.model.mapper.TenantMapper;
 import com.graccasoft.redkokia.repository.TenantRepository;
@@ -28,7 +30,7 @@ public class TenantService {
 
 
     public List<TenantDto> getTenants(){
-        return tenantMapper.toDtoList( tenantRepository.findAll() );
+        return tenantMapper.toDtoList( tenantRepository.findAllByIsDeleted(false) );
     }
 
     public TenantDto getTenant(Long tenantId){
@@ -56,5 +58,21 @@ public class TenantService {
         return sb.toString().toLowerCase() ;
     }
 
+    public void toggleActive(Long tenantId){
+        Tenant tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(()-> new RecordDoesNotExistException("Tenant not found"));
+
+        tenant.setIsActive (!tenant.getIsActive());
+        tenantRepository.save(tenant);
+    }
+
+    public void deleteTenant(Long tenantId){
+        Tenant tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(()-> new RecordDoesNotExistException("Tenant not found"));
+
+        tenant.setIsDeleted(true);
+        tenant.setIsActive (false);
+        tenantRepository.save(tenant);
+    }
 
 }

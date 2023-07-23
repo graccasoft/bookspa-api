@@ -23,7 +23,7 @@ public class EmployeeService {
     }
 
     public List<EmployeeDto> getEmployees(Long tenantId){
-        return employeeMapper.toDtoList( employeeRepository.findAllByTenant_Id(tenantId) );
+        return employeeMapper.toDtoList( employeeRepository.findAllByTenant_IdAndIsDeleted(tenantId, false) );
     }
     public List<EmployeeDto> getEmployees(Long tenantId, boolean availability){
         return employeeMapper.toDtoList( employeeRepository.findAllByTenant_IdAndIsAvailable(tenantId, availability) );
@@ -36,4 +36,14 @@ public class EmployeeService {
         employee.setIsAvailable( employeeDto.isAvailable() );
         employeeRepository.save(employee);
     }
+
+    public void deleteEmployee(Long employeeId){
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(()-> new RecordDoesNotExistException("Employee not found"));
+
+        employee.setIsDeleted(true);
+        employee.setIsAvailable(false);
+        employeeRepository.save(employee);
+    }
+
 }

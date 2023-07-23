@@ -46,4 +46,31 @@ public class TenantController {
                 HttpStatus.CREATED);
     }
 
+    @PutMapping("{tenantId}/users/{userId}")
+    public ResponseEntity<GenericResponse> updateUser(@RequestBody RegisterUserDto registerUserDto){
+        userService.editUser(registerUserDto);
+        return new ResponseEntity<>(
+                new GenericResponse(true, "User Saved"),
+                HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("{tenantId}/users/{userId}")
+    public ResponseEntity<GenericResponse> deleteUser(@PathVariable Long userId){
+        userService.deleteUser (userId);
+        return new ResponseEntity<>(
+                new GenericResponse(true, "User has been deleted"),
+                HttpStatus.CREATED);
+    }
+    @PatchMapping("{tenantId}")
+    public GenericResponse toggleActive(@PathVariable Long tenantId){
+        tenantService.toggleActive(tenantId);
+        return new GenericResponse(true, "Tenant status updated");
+    }
+
+    @DeleteMapping("{tenantId}")
+    public GenericResponse deleteTenant(@PathVariable Long tenantId){
+        tenantService.deleteTenant(tenantId);
+        return new GenericResponse(true, "Tenant status updated");
+    }
+
 }

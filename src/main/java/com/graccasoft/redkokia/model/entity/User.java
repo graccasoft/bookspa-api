@@ -26,6 +26,7 @@ public class User implements UserDetails {
     private boolean isAccountNonLocked;
     private boolean isEnabled;
     private String role;
+    private Boolean isDeleted = false;
 
     @ManyToOne
     private Tenant tenant;

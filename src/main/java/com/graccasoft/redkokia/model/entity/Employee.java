@@ -19,4 +19,5 @@ public class Employee {
 
     @ManyToOne
     private Tenant tenant;
+    private Boolean isDeleted = false;
 }

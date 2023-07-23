@@ -140,13 +140,36 @@ public class BookingService {
                 .map(this::bookingToTimeSlot)
                 .toList();
 
-        //start time to be at 8am, and end time to be 10 hours from start
-        //todo: start time and operation hours to come from tenant settings
-        LocalDateTime startTime = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime().plusHours(8);
-        LocalDateTime endTime = startTime.plusHours(10);
+        LocalDateTime startTime = startDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime();
+        LocalDateTime endTime = startTime;
+        Tenant tenant = tenantRepository.getReferenceById(tenantId);
+        if( tenant.getOpeningTime() != null ){
+            int[] times = timeStrToInt(tenant.getOpeningTime());
+            startTime = startTime.plusHours(times[0]);
+            startTime = startTime.plusMinutes(times[1]);
+        }
+
+        if( tenant.getClosingTime() != null ){
+            int[] times = timeStrToInt(tenant.getClosingTime());
+            endTime = endTime.plusHours(times[0]);
+            endTime = endTime.plusMinutes(times[1]);
+        }else{
+            endTime = endTime.plusHours(10);
+        }
 
         return freeTimeFinderService.findFreeTimeSlots( new ArrayList<>(reservedTimeSlots), startTime, endTime, duration );
 
+    }
+
+    private int[] timeStrToInt(String timeStr){
+        int[] time = new int[]{8,16};
+
+        String[] tmp = timeStr.split(":");
+        if( tmp.length == 2 ){
+            time[0] = Integer.parseInt( tmp[0] );
+            time[1] = Integer.parseInt( tmp[1] );
+        }
+        return time;
     }
 
     public TimeSlot bookingToTimeSlot(Booking booking){

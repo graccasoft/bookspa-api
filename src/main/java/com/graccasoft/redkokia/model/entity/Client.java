@@ -22,4 +22,5 @@ public class Client {
 
     @ManyToOne
     private Tenant tenant;
+    private Boolean isDeleted = false;
 }

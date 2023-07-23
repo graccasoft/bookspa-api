@@ -25,5 +25,7 @@ public class Tenant {
     private String reference;
     private String openingTime;
     private String closingTime;
+    private Boolean isActive = true;
+    private Boolean isDeleted = false;
 
 }

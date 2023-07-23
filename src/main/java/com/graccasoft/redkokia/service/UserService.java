@@ -1,8 +1,10 @@
 package com.graccasoft.redkokia.service;
 
+import com.graccasoft.redkokia.exception.RecordDoesNotExistException;
 import com.graccasoft.redkokia.exception.UserAlreadyExistsException;
 import com.graccasoft.redkokia.model.dto.JwtDto;
 import com.graccasoft.redkokia.model.dto.RegisterUserDto;
+import com.graccasoft.redkokia.model.entity.Tenant;
 import com.graccasoft.redkokia.model.entity.User;
 import com.graccasoft.redkokia.model.mapper.TenantMapper;
 import com.graccasoft.redkokia.model.mapper.UserMapper;
@@ -38,8 +40,31 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void editUser(RegisterUserDto updateUserRequest){
+        User dbUser = userRepository.findById(updateUserRequest.id())
+                .orElseThrow(()-> new RecordDoesNotExistException("User with id not found"));
+
+        if(!updateUserRequest.password().isBlank()) {
+            dbUser.setPassword(passwordEncoder.encode(updateUserRequest.password()));
+        }
+        dbUser.setFirstName(updateUserRequest.firstName());
+        dbUser.setLastName(updateUserRequest.lastName());
+        dbUser.setRole(updateUserRequest.role());
+
+        userRepository.save(dbUser);
+    }
+
+    public void deleteUser(Long userId){
+        User user = userRepository.findById(userId)
+                .orElseThrow(()-> new RecordDoesNotExistException("User not found"));
+
+        user.setIsDeleted(true);
+        user.setEnabled (false);
+        userRepository.save(user);
+    }
+
     public List<RegisterUserDto> getTenantUsers(Long tenantId){
-        return userMapper.toDtoList( userRepository.findAllByTenant_Id(tenantId) );
+        return userMapper.toDtoList( userRepository.findAllByTenant_IdAndIsDeleted(tenantId, false) );
     }
 
     public JwtDto getUserJwt(String username, String token){

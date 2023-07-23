@@ -11,4 +11,5 @@ public interface ClientRepository extends JpaRepository<Client, Long> {
     Optional<Client> findByEmail(String email);
 
     List<Client> findAllByTenant_Id(Long tenantId);
+    List<Client> findAllByTenant_IdAndIsDeleted(Long tenant_id, Boolean deleted);
 }

@@ -10,6 +10,7 @@ public record TenantDto(
         String contactPhone,
         String reference,
         String openingTime,
-        String closingTime
+        String closingTime,
+        Boolean isActive
 ) {
 }
