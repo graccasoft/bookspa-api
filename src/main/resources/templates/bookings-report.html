@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title th:remove="all">RedKokia</title>
+</head>
+<body>
+
+<h2 th:text="${tenant.companyName}"></h2>
+
+<h4>Total Bank: <span th:text="${totalBank}"></span></h4>
+<h4>Total Cash: <span th:text="${totalCash}"></span></h4>
+<table style="background-color: #000000; width: 100%" cellpadding="1" cellspacing="1">
+    <thead>
+    <tr>
+        <th style="background-color: #ffffff">Date</th>
+        <th style="background-color: #ffffff">Treatment Date</th>
+        <th style="background-color: #ffffff">Treatment</th>
+        <th style="background-color: #ffffff">Therapist</th>
+        <th style="background-color: #ffffff">Customer</th>
+        <th style="background-color: #ffffff">Total Amount</th>
+        <th style="background-color: #ffffff">Payment Method</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="booking : ${bookings}">
+        <td style="background-color: #ffffff" th:text="${#dates.format(booking.createdAt, 'dd MMMM yyyy')}"></td>
+        <td style="background-color: #ffffff" th:text="${#dates.format(booking.bookingDate, 'dd MMMM yyyy hh:mm')}"></td>
+        <td style="background-color: #ffffff" th:text="${booking.treatments}"></td>
+        <td style="background-color: #ffffff" th:text="${booking.employee}"></td>
+        <td style="background-color: #ffffff" th:text="${booking.client}"></td>
+        <td style="background-color: #ffffff" th:text="${booking.totalAmount}"></td>
+        <td style="background-color: #ffffff" th:text="${booking.paymentMethod}"></td>
+    </tr>
+    </tbody>
+</table>
+
+
+</body>
+
+</html>

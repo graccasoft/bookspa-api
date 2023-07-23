@@ -22,8 +22,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-06-25T12:00:05+0200",
-    comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.5 (Oracle Corporation)"
+    date = "2023-07-10T19:10:27+0200",
+    comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.7 (Private Build)"
 )
 @Component
 public class BookingMapperImpl implements BookingMapper {
@@ -219,6 +219,7 @@ public class BookingMapperImpl implements BookingMapper {
         treatment.setMinimumDuration( treatmentDto.minimumDuration() );
         treatment.setMaximumDuration( treatmentDto.maximumDuration() );
         treatment.setTenant( tenantDtoToTenant( treatmentDto.tenant() ) );
+        treatment.setIsPromotion( treatmentDto.isPromotion() );
 
         return treatment;
     }
@@ -344,6 +345,7 @@ public class BookingMapperImpl implements BookingMapper {
         Integer maximumDuration = null;
         TenantDto tenant = null;
         TreatmentCategoryDto category = null;
+        Boolean isPromotion = null;
 
         id = treatment.getId();
         name = treatment.getName();
@@ -353,8 +355,9 @@ public class BookingMapperImpl implements BookingMapper {
         maximumDuration = treatment.getMaximumDuration();
         tenant = tenantToTenantDto( treatment.getTenant() );
         category = treatmentCategoryToTreatmentCategoryDto( treatment.getCategory() );
+        isPromotion = treatment.getIsPromotion();
 
-        TreatmentDto treatmentDto = new TreatmentDto( id, name, description, price, minimumDuration, maximumDuration, tenant, category );
+        TreatmentDto treatmentDto = new TreatmentDto( id, name, description, price, minimumDuration, maximumDuration, tenant, category, isPromotion );
 
         return treatmentDto;
     }

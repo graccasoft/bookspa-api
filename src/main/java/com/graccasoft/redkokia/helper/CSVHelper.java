@@ -20,6 +20,7 @@ public class CSVHelper {
              CSVPrinter csvPrinter = new CSVPrinter(new PrintWriter(out), format);) {
             for (BookingReportDto booking : bookings) {
                 List<String> data = Arrays.asList(
+                        String.valueOf( booking.getCreatedAt() ),
                         String.valueOf( booking.getBookingDate() ),
                         booking.getTreatments(),
                         booking.getEmployee(),

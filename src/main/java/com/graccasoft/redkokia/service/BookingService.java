@@ -6,14 +6,17 @@ import com.graccasoft.redkokia.model.dto.BookingReportDto;
 import com.graccasoft.redkokia.model.dto.TimeSlot;
 import com.graccasoft.redkokia.model.entity.Booking;
 import com.graccasoft.redkokia.model.entity.Client;
+import com.graccasoft.redkokia.model.entity.Tenant;
 import com.graccasoft.redkokia.model.enums.BookingStatus;
 import com.graccasoft.redkokia.model.mapper.BookingMapper;
 import com.graccasoft.redkokia.model.mapper.BookingReportMapper;
 import com.graccasoft.redkokia.model.mapper.ClientMapper;
 import com.graccasoft.redkokia.repository.BookingRepository;
+import com.graccasoft.redkokia.repository.TenantRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
@@ -36,6 +39,8 @@ public class BookingService {
     private final SpringTemplateEngine springTemplateEngine;
     private final EmailSenderService emailSenderService;
     private final BookingReportMapper bookingReportMapper;
+    private final TenantRepository tenantRepository;
+    private final PdfGeneratorService pdfGeneratorService;
 
     public BookingDto saveBooking(BookingDto bookingDto){
         //todo validate dates, etc
@@ -170,9 +175,20 @@ public class BookingService {
     }
 
     public List<BookingReportDto> bookingsReport(Long tenantId, Date startDate, Date endDate){
-        return bookingRepository.findAllByTreatments_Tenant_IdAndCreatedAtBetween(tenantId, startDate, endDate)
+        return bookingRepository.findAllByTreatments_Tenant_IdAndCreatedAtBetweenAndStatusNotIn(tenantId, startDate, endDate, Collections.singletonList(BookingStatus.CANCELLED))
                 .stream()
                 .map(bookingReportMapper)
                 .toList();
+    }
+
+    public Resource bookingsReportPdf(Long tenantId, Date startDate, Date endDate){
+        Tenant tenant = tenantRepository.findById(tenantId)
+                .orElseThrow(()-> new RecordDoesNotExistException("Tenant not found"));
+        List<BookingReportDto> bookings = bookingRepository.findAllByTreatments_Tenant_IdAndCreatedAtBetweenAndStatusNotIn(tenantId, startDate, endDate, Collections.singletonList(BookingStatus.CANCELLED))
+                .stream()
+                .map(bookingReportMapper)
+                .toList();
+
+        return pdfGeneratorService.getBookingsReportPdf(bookings, tenant);
     }
 }

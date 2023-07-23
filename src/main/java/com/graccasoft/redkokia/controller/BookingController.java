@@ -68,4 +68,18 @@ public class BookingController {
                 .contentType(MediaType.parseMediaType("application/csv"))
                 .body(file);
     }
+
+    @GetMapping("report-pdf")
+    public ResponseEntity<Resource> getPdfReport(
+            @RequestParam Long tenantId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate
+    ) {
+        Resource pdfReport =  bookingService.bookingsReportPdf(tenantId, startDate, endDate);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=bookings-report.pdf")
+                .contentType(MediaType.parseMediaType("application/csv"))
+                .body(pdfReport);
+    }
 }
