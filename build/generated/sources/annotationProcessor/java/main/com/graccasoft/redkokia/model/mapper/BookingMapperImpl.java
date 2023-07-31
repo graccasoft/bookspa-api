@@ -22,7 +22,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-07-10T19:10:27+0200",
+    date = "2023-07-23T16:36:46+0200",
     comments = "version: 1.5.5.Final, compiler: IncrementalProcessingEnvironment from gradle-language-java-7.6.1.jar, environment: Java 17.0.7 (Private Build)"
 )
 @Component
@@ -167,6 +167,7 @@ public class BookingMapperImpl implements BookingMapper {
         tenant.setReference( tenantDto.reference() );
         tenant.setOpeningTime( tenantDto.openingTime() );
         tenant.setClosingTime( tenantDto.closingTime() );
+        tenant.setIsActive( tenantDto.isActive() );
 
         return tenant;
     }
@@ -269,6 +270,7 @@ public class BookingMapperImpl implements BookingMapper {
         String reference = null;
         String openingTime = null;
         String closingTime = null;
+        Boolean isActive = null;
 
         id = tenant.getId();
         companyName = tenant.getCompanyName();
@@ -280,8 +282,9 @@ public class BookingMapperImpl implements BookingMapper {
         reference = tenant.getReference();
         openingTime = tenant.getOpeningTime();
         closingTime = tenant.getClosingTime();
+        isActive = tenant.getIsActive();
 
-        TenantDto tenantDto = new TenantDto( id, companyName, companyPhone, companyEmail, companyAddress, contactName, contactPhone, reference, openingTime, closingTime );
+        TenantDto tenantDto = new TenantDto( id, companyName, companyPhone, companyEmail, companyAddress, contactName, contactPhone, reference, openingTime, closingTime, isActive );
 
         return tenantDto;
     }
@@ -414,6 +417,7 @@ public class BookingMapperImpl implements BookingMapper {
         mappingTarget.setReference( tenantDto.reference() );
         mappingTarget.setOpeningTime( tenantDto.openingTime() );
         mappingTarget.setClosingTime( tenantDto.closingTime() );
+        mappingTarget.setIsActive( tenantDto.isActive() );
     }
 
     protected void clientDtoToClient1(ClientDto clientDto, Client mappingTarget) {

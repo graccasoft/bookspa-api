@@ -90,8 +90,8 @@ public class BookingService {
         emailSenderService.sendEmail(booking.getClient().getEmail(), "Your Booking on RedKokia", htmlContent);
     }
 
-    public List<BookingDto> getBookings(Long tenantId){
-        return bookingMapper.toDtoList( bookingRepository.findAllByTreatments_Tenant_Id(tenantId) );
+    public List<BookingDto> getBookings(Long tenantId,Date startDate, Date endDate){
+        return bookingMapper.toDtoList( bookingRepository.findAllByTreatments_Tenant_IdAndCreatedAtBetween(tenantId, startDate, endDate) );
     }
 
     public BookingDto getBooking(Long bookingId){

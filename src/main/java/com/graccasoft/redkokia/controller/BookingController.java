@@ -30,8 +30,12 @@ public class BookingController {
     }
 
     @GetMapping
-    public List<BookingDto> getBookings(@RequestParam Long tenantId){
-        return bookingService.getBookings(tenantId);
+    public List<BookingDto> getBookings(
+            @RequestParam Long tenantId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate
+    ){
+        return bookingService.getBookings(tenantId, startDate, endDate);
     }
 
     @DeleteMapping("{bookingId}")
