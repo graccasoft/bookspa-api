@@ -22,6 +22,11 @@ public class OnlineBookingController {
     private final TenantService tenantService;
     private final EmployeeService employeeService;
 
+    @GetMapping("status")
+    public GenericResponse status(){
+        return new GenericResponse(true, "Ver: 31-07-2023");
+    }
+
     @GetMapping("/available-slots")
     public List<TimeSlot> getAvailableTimeSlots(
             @RequestParam Long tenantId,
@@ -68,4 +73,5 @@ public class OnlineBookingController {
         bookingService.cancelBooking (reference);
         return new GenericResponse(true, "Booking has been successfully cancelled");
     }
+
 }
