@@ -24,7 +24,7 @@ public class OnlineBookingController {
 
     @GetMapping("status")
     public GenericResponse status(){
-        return new GenericResponse(true, "Ver: 31-07-2023");
+        return new GenericResponse(true, "Ver: 01-07-2023");
     }
 
     @GetMapping("/available-slots")

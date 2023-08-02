@@ -27,7 +27,7 @@ public class BookingReportMapper implements Function<Booking, BookingReportDto> 
                 .createdAt(booking.getCreatedAt())
                 .totalAmount(total)
                 .paymentMethod(booking.getPaymentMethod())
-                .client(booking.getClient().getFirstName() + booking.getClient().getSurname())
+                .client(booking.getClient().getFirstName() + " " + booking.getClient().getSurname())
                 .build();
     }
 }
