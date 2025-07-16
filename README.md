@@ -1,7 +1,7 @@
-# RedKokia Backend API
-RedKokia Spa Reservation Backend
+# BookSpa Backend API
+BookSpa Reservation Backend
 
-https://redkokia.com/
+https://bookspa.app
 
 ## Technologies
 * Spring Boot 3.0.6

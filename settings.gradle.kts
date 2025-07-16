@@ -1,1 +1,1 @@
-rootProject.name = "red-kokia"
+rootProject.name = "bookspa-api"

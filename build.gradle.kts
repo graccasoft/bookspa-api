@@ -39,6 +39,7 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 	implementation("org.springframework.boot:spring-boot-starter-oauth2-resource-server")
 	implementation("org.apache.commons:commons-csv:1.9.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
 
 	implementation ("org.xhtmlrenderer:flying-saucer-pdf:9.1.20")
 	implementation ("ognl:ognl:3.3.4")
