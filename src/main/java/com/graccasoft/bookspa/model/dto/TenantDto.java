@@ -11,6 +11,7 @@ public record TenantDto(
         String reference,
         String openingTime,
         String closingTime,
-        Boolean isActive
+        Boolean isActive,
+        IndustryDto industry
 ) {
 }

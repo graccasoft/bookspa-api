@@ -61,7 +61,8 @@ public class TenantService {
         Tenant tenant = tenantRepository.findById(tenantId)
                 .orElseThrow(()-> new RecordNotFoundException("Tenant not found"));
 
-        tenant.setIsActive (!tenant.getIsActive());
+        var status = tenant.getIsActive() == null || !tenant.getIsActive();
+        tenant.setIsActive ( status );
         tenantRepository.save(tenant);
     }
 

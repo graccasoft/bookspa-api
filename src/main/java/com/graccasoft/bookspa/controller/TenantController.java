@@ -61,7 +61,7 @@ public class TenantController {
                 new GenericResponse(true, "User has been deleted"),
                 HttpStatus.CREATED);
     }
-    @PatchMapping("{tenantId}")
+    @PatchMapping("{tenantId}/toggle-status")
     public GenericResponse toggleActive(@PathVariable Long tenantId){
         tenantService.toggleActive(tenantId);
         return new GenericResponse(true, "Tenant status updated");

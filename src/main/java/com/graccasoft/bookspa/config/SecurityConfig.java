@@ -45,7 +45,7 @@ public class SecurityConfig {
                         //preflight requests
                         .requestMatchers(HttpMethod.OPTIONS).permitAll()
 
-                        .requestMatchers ("/token","/online-booking/**","/users").permitAll()
+                        .requestMatchers ("/token","/online-booking/**","/users","/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .cors(AbstractHttpConfigurer::disable)
